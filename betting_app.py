@@ -62,12 +62,14 @@ def get_bet_history(conn, user_id):
 
 
 st.title("🎲 Betting App with Database")
+st.write("Welcome to my betting app prototype!")
 
 conn = init_db()
 
 username = st.text_input("Username:")
 
-st.write("Welcome to my betting app prototype!")
+if (username):
+    st.write(f"Current Balance: ${get_user(conn, username)}")
 
 bet_amount = st.number_input("Enter your bet amount:", min_value=0, value=10)
 team_choice = st.selectbox("Pick a team:", ["Team A", "Team B"])
