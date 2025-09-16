@@ -8,3 +8,4 @@ team_choice = st.selectbox("Pick a team:", ["Team A", "Team B"])
 
 if st.button("Place Bet"):
     st.success(f"You bet ${bet_amount} on {team_choice}")
+
