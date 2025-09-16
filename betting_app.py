@@ -8,6 +8,8 @@ def init_db():
     # conn is sqlite3 connection object used for running queries
     # connect() opens a connection to the sqlite file 'bets.db'
     conn = sqlite3.connect("bets.db")
+    conn.execute("PRAGMA foreign_keys = ON")
+
 
     # c is a cursor used to run SQL commands
     c = conn.cursor()
@@ -69,7 +71,7 @@ conn = init_db()
 username = st.text_input("Username:")
 
 if (username):
-    st.write(f"Current Balance: ${get_user(conn, username)}")
+    st.write(f"Current user: {username}")
 
 bet_amount = st.number_input("Enter your bet amount:", min_value=0, value=10)
 team_choice = st.selectbox("Pick a team:", ["Team A", "Team B"])
