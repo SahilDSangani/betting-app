@@ -26,7 +26,7 @@ def init_db():
                     team TEXT,
                     outcome TEXT,
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FORIEGN KEY (user_id) REFERENCES users (id))''')
+                    FOREIGN KEY (user_id) REFERENCES users (id))''')
     
     # writes the table creation changes to disk
     conn.commit()
