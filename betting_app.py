@@ -63,6 +63,10 @@ def get_bet_history(conn, user_id):
     return c.fetchall()
 
 
+# ==================== Streamlit App =========================
+
+st.set_page_config(page_title="Betting App", layout="wide")
+
 st.title("🎲 Betting App with Database")
 st.write("Welcome to my betting app prototype!")
 
@@ -71,11 +75,25 @@ conn = init_db()
 username = st.text_input("Username:")
 
 if (username):
-    st.write(f"Current user: {username}")
+    create_user(conn, username)
+    user = get_user(conn, username)
 
-bet_amount = st.number_input("Enter your bet amount:", min_value=0, value=10)
-team_choice = st.selectbox("Pick a team:", ["Team A", "Team B"])
+    st.write(f"Current user: {user[1]}")
+    
+    answer1  = st.number_input("1 or 0?", min_value=0, max_value=1, step=1)
 
-if st.button("Place Bet"):
-    st.success(f"You bet ${bet_amount} on {team_choice}")
+    if st.button("Place Bet"):
+        result = random.randint(0, 1)
 
+        if answer1 == result:
+            update_balance(conn, user[0], user[2] + 10)
+            st.success("You WON the bet! + $10")
+        else:
+            update_balance(conn, user[0], user[2] - 10)
+            st.error("You LOST the bet! -$10")
+
+    # refresh the sidebar to display latest balance
+    user = get_user(conn, username)
+    with st.sidebar:
+        st.metric("Balance", f"${user[2]}")
+    
