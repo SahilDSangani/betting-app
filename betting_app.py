@@ -72,28 +72,34 @@ st.write("Welcome to my betting app prototype!")
 
 conn = init_db()
 
-username = st.text_input("Username:")
+username = st.sidebar.text_input("Username:")
 
 if (username):
     create_user(conn, username)
     user = get_user(conn, username)
 
-    st.write(f"Current user: {user[1]}")
-    
-    answer1  = st.number_input("1 or 0?", min_value=0, max_value=1, step=1)
+    wager = 10
 
-    if st.button("Place Bet"):
-        result = random.randint(0, 1)
+    answer1 = st.radio("Pick your answer:", options=["0", "1"])
 
-        if answer1 == result:
-            update_balance(conn, user[0], user[2] + 10)
-            st.success("You WON the bet! + $10")
-        else:
-            update_balance(conn, user[0], user[2] - 10)
-            st.error("You LOST the bet! -$10")
+    if user[2] < wager:
+        st.write("⚠️ You don't have enough balance to bet. Please deposit money.")
+    else:
+        if st.button("Place Bet"):
+            result = random.randint(0, 1)
+
+            if answer1 == result:
+                update_balance(conn, user[0], user[2] + wager)
+                st.success(f"You WON the bet! + ${wager}")
+            else:
+                update_balance(conn, user[0], user[2] - wager)
+                st.error(f"You LOST the bet! -${wager}")
 
     # refresh the sidebar to display latest balance
     user = get_user(conn, username)
     with st.sidebar:
+        st.header(f"{user[1]}")
         st.metric("Balance", f"${user[2]}")
+
+    
     
